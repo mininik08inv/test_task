@@ -1,0 +1,12 @@
+<h1>{% if form.instance.id %}Редактирование заказа{% else %}Создание заказа{% endif %}</h1>
+<form method="post">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <button type="submit">Сохранить</button>
+</form>
+{% if form.instance.id %}
+<a href="{% url 'order_delete' form.instance.id %}">Удалить заказ</a>
+<br>
+{% endif %}
+
+<a href="{% url 'order_list' %}">Назад к списку заказов</a>

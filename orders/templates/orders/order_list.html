@@ -1,0 +1,54 @@
+<h1>Список заказов</h1>
+
+<!-- Поисковая форма -->
+<form method="get" action="{% url 'order_list' %}">
+    <label for="table_number">Номер стола:</label>
+    <input type="number" id="table_number" name="table_number">
+
+    <label for="status">Статус:</label>
+    <select id="status" name="status">
+        <option value="">Все</option>
+        <option value="waiting">В ожидании</option>
+        <option value="ready">Готово</option>
+        <option value="paid">Оплачено</option>
+    </select>
+
+    <button type="submit">Поиск</button>
+</form>
+
+<!-- Таблица заказов -->
+<table border="1">
+    <tr>
+        <th>ID</th>
+        <th>Номер стола</th>
+        <th>Блюда</th>
+        <th>Общая стоимость</th>
+        <th>Статус</th>
+        <th>Действия</th>
+    </tr>
+    {% for order in orders %}
+    <tr>
+        <td><a href="{% url 'order_update' order.id %}">{{ order.id }}</a></td>
+        <td>{{ order.table_number }}</td>
+        <td>
+            <ul>
+                {% for dish in order.dishes.all %}
+                <li>{{ dish.name }} - {{ dish.price }} руб.</li>
+                {% endfor %}
+            </ul>
+        </td>
+        <td>{{ order.total_price }} руб.</td>
+        <td>{{ order.get_status_display }}</td>
+        <td>
+            <a href="{% url 'order_update' order.id %}">Изменить</a>
+            <a href="{% url 'order_delete' order.id %}">Удалить</a>
+        </td>
+    </tr>
+    {% endfor %}
+</table>
+
+<a href="{% url 'order_create' %}">Создать новый заказ</a>
+
+<br>
+
+<a href="{% url 'revenue_report' %}">Отчет о выручке</a>
